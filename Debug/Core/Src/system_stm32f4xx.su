@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 ../Core/Src/system_stm32f4xx.c:167:6:SystemInit	4	static
 ../Core/Src/system_stm32f4xx.c:220:6:SystemCoreClockUpdate	32	static
+=======
+../Core/Src/system_stm32f4xx.c:167:6:SystemInit	4	static
+../Core/Src/system_stm32f4xx.c:220:6:SystemCoreClockUpdate	32	static
+>>>>>>> 540525ed867fd50e6e3835a5451e9acd24498d2a

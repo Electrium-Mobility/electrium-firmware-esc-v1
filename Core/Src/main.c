@@ -139,7 +139,12 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4); // Motor Driver A H2 (PD15)
 
   // Test PWM
-  TIM3->CCR2 = 20000;
+  TIM3->CCR2 = 10000;
+  TIM3->CCR1 = 10000;
+  TIM4->CCR1 = 10000;
+  TIM4->CCR2 = 10000;
+  TIM4->CCR3 = 10000;
+  TIM4->CCR4 = 10000;
 
   /* USER CODE END 2 */
 
