@@ -122,6 +122,24 @@ int main(void)
   MX_SPI2_Init();
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
+  // Timer 1
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1); // Motor Driver B L2 (PE9)
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2); // Motor Driver B H2 (PE11)
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3); // Motor Driver B L1 (PE13)
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4); // Motor Driver B H1 (PE14)
+  // Timer 2
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1); // Motor Driver A L1 (PC6)
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2); // Motor Driver A H1 (PC7)
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3); // Motor Driver B H3 (PB0)
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4); // Motor Driver B L3 (PB1)
+  // Timer 3
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1); // Motor Driver A L3 (PD12
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2); // Motor Driver A H3 (PD13)
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3); // Motor Driver A L2 (PD14)
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4); // Motor Driver A H2 (PD15)
+
+  // Test PWM
+  TIM3->CCR2 = 20000;
 
   /* USER CODE END 2 */
 
@@ -132,6 +150,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_7);
+	  HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -153,14 +173,13 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 15;
-  RCC_OscInitStruct.PLL.PLLN = 144;
+  RCC_OscInitStruct.PLL.PLLN = 225;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 5;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -172,12 +191,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -516,7 +535,7 @@ static void MX_TIM1_Init(void)
   htim1.Init.Period = 65535;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
@@ -601,7 +620,7 @@ static void MX_TIM3_Init(void)
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 65535;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
@@ -672,7 +691,7 @@ static void MX_TIM4_Init(void)
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 65535;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
