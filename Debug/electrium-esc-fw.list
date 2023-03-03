@@ -528,8 +528,8 @@ void SystemClock_Config(void)
  80005c0:	230f      	movs	r3, #15
  80005c2:	60fb      	str	r3, [r7, #12]
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
- 80005c4:	2300      	movs	r3, #0
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 80005c4:	2302      	movs	r3, #2
  80005c6:	613b      	str	r3, [r7, #16]
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
  80005c8:	2300      	movs	r3, #0
@@ -541,9 +541,9 @@ void SystemClock_Config(void)
  80005d2:	f44f 5380 	mov.w	r3, #4096	; 0x1000
  80005d6:	61fb      	str	r3, [r7, #28]
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
  80005d8:	f107 030c 	add.w	r3, r7, #12
- 80005dc:	2100      	movs	r1, #0
+ 80005dc:	2104      	movs	r1, #4
  80005de:	4618      	mov	r0, r3
  80005e0:	f002 fa8a 	bl	8002af8 <HAL_RCC_ClockConfig>
  80005e4:	4603      	mov	r3, r0
